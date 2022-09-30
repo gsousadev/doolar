@@ -4,9 +4,9 @@ import com.salus.doolar.domain.AbstractEntity
 import com.salus.doolar.domain.task.enum.ActivityCategory
 import com.salus.doolar.domain.task.enum.PeriodName
 import com.salus.doolar.domain.task.enum.TaskStatus
-import com.salus.doolar.domain.task.exception.FinishedTaskCannotBeStatusChangedToNotFinished
+import com.salus.doolar.domain.task.exception.FinishedTaskCannotBeStatusChangedToNotFinishedException
 import com.salus.doolar.domain.task.exception.NotFinishedTaskCannotBeStatusChangedException
-import com.salus.doolar.domain.task.exception.TaskPriorityCannotBeLessThanOne
+import com.salus.doolar.domain.task.exception.TaskPriorityCannotBeLessThanOneException
 import com.salus.doolar.domain.task.valueObject.Activity
 
 class Task(
@@ -65,7 +65,7 @@ class Task(
         }
 
         if (newStatus == TaskStatus.NOT_FINISHED && this.status == TaskStatus.FINISHED) {
-            throw FinishedTaskCannotBeStatusChangedToNotFinished()
+            throw FinishedTaskCannotBeStatusChangedToNotFinishedException()
         }
 
         this.status = newStatus
@@ -73,7 +73,7 @@ class Task(
 
     private fun validateNewPriority(newPriority: Int) {
         if (newPriority <= 0) {
-            throw TaskPriorityCannotBeLessThanOne()
+            throw TaskPriorityCannotBeLessThanOneException()
         }
     }
 }

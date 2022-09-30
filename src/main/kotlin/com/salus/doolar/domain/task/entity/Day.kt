@@ -2,22 +2,26 @@ package com.salus.doolar.domain.task.entity
 
 import com.salus.doolar.domain.AbstractEntity
 import com.salus.doolar.domain.task.enum.DayName
+import com.salus.doolar.domain.task.exception.DayCannotBeWithoutTasksException
 
-class Day(
+data class Day(
     val name: DayName,
-    var tasks: MutableList<Task> = mutableListOf()
+    val tasks: MutableList<Task>
 ) : AbstractEntity() {
 
     init {
+        this.validateTaskList()
         this.normalizePriorities()
+    }
+
+    private fun validateTaskList() {
+        if (this.tasks.isEmpty()) {
+            throw DayCannotBeWithoutTasksException()
+        }
     }
 
     fun addTask(newTask: Task) {
         this.normalizePriorities()
-
-        if (tasks.isEmpty()) {
-            newTask.changePriority(1);
-        }
 
         if (tasks.any { it.priority == newTask.priority }) {
             relocatePrioritiesByNewTaskPriority(newTask)
@@ -30,6 +34,7 @@ class Day(
 
     fun removeTask(task: Task) {
         this.tasks.remove(task)
+        this.validateTaskList()
         this.normalizePriorities()
     }
 

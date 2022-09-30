@@ -3,9 +3,9 @@ package com.salus.doolar.domain.task.entity
 import com.salus.doolar.domain.task.enum.ActivityCategory
 import com.salus.doolar.domain.task.enum.PeriodName
 import com.salus.doolar.domain.task.enum.TaskStatus
-import com.salus.doolar.domain.task.exception.FinishedTaskCannotBeStatusChangedToNotFinished
+import com.salus.doolar.domain.task.exception.FinishedTaskCannotBeStatusChangedToNotFinishedException
 import com.salus.doolar.domain.task.exception.NotFinishedTaskCannotBeStatusChangedException
-import com.salus.doolar.domain.task.exception.TaskPriorityCannotBeLessThanOne
+import com.salus.doolar.domain.task.exception.TaskPriorityCannotBeLessThanOneException
 import com.salus.doolar.domain.task.valueObject.Activity
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
@@ -29,7 +29,7 @@ internal class TaskTest {
     @Test
     fun testShouldThrowWhenCompletedStatusIsChangedToNotFinishedStatus() {
         Task(1, PeriodName.MORNING, this.activity).run {
-            assertThrows<FinishedTaskCannotBeStatusChangedToNotFinished> {
+            assertThrows<FinishedTaskCannotBeStatusChangedToNotFinishedException> {
                 this.finish()
                 this.markTaskAsNotFinished()
             }
@@ -67,12 +67,12 @@ internal class TaskTest {
     @Test
     fun testShouldThrowWhenNewPriorityIsLessThanOne(){
         Task(1, PeriodName.MORNING, this.activity).run {
-            assertThrows<TaskPriorityCannotBeLessThanOne> {
+            assertThrows<TaskPriorityCannotBeLessThanOneException> {
                 this.changePriority(0)
             }
         }
 
-        assertThrows<TaskPriorityCannotBeLessThanOne> {
+        assertThrows<TaskPriorityCannotBeLessThanOneException> {
             Task(-2, PeriodName.MORNING, this.activity)
         }
     }
