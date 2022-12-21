@@ -16,7 +16,7 @@ class Task(
 ) : AbstractEntity() {
 
     init {
-        validateNewPriority(priority);
+        validateNewPriority(priority)
     }
 
     var priority: Int = priority
@@ -57,6 +57,18 @@ class Task(
 
     fun getCategory(): ActivityCategory {
         return this.activity.category
+    }
+
+    fun isFinished(): Boolean{
+        return this.status == TaskStatus.FINISHED
+    }
+
+    fun isPending(): Boolean{
+        return this.status == TaskStatus.PENDING
+    }
+
+    fun isNotFinished(): Boolean{
+        return this.status == TaskStatus.NOT_FINISHED
     }
 
     private fun changeStatus(newStatus: TaskStatus) {

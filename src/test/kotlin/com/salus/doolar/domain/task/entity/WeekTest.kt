@@ -8,6 +8,9 @@ import com.salus.doolar.domain.task.exception.WeekCannotHaveMoreThanSevenDaysExc
 import com.salus.doolar.domain.task.valueObject.Activity
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class WeekTest {
 
@@ -41,9 +44,9 @@ internal class WeekTest {
         }
 
     }
+
     @Test
     fun testShouldThrowErrorWhenCreateWeekWithoutDays() {
-
         assertThrows<WeekCannotBeWithoutDaysException> {
             Week(
                 "Semana de férias", mutableMapOf()
@@ -52,8 +55,26 @@ internal class WeekTest {
     }
 
     @Test
-    fun testShouldAddDay(){
+    fun testShouldAddDayAndRemoveDay() {
 
-        val week = Week("Semana de testes", mutableMapOf())
+        val day1 = Day(
+            DayName.MONDAY,
+            mutableListOf(Task(2, PeriodName.MORNING, Activity("Limpar o chão", ActivityCategory.HOME_CARE)))
+        )
+        val day2 = Day(
+            DayName.TUESDAY,
+            mutableListOf(Task(1, PeriodName.NIGHT, Activity("Lavar roupa", ActivityCategory.HOME_CARE)))
+        )
+
+        Week("Semana de testes", mutableMapOf(day1.name to day1)).run {
+            addDay(day2)
+            assertEquals(2, days.size)
+            assertTrue(block = { days.containsKey(DayName.MONDAY) })
+            assertTrue(block = { days.containsKey(DayName.TUESDAY) })
+            removeDay(day2);
+            assertEquals(1, days.size)
+            assertTrue(block = { days.containsKey(DayName.MONDAY) })
+            assertFalse(block = { days.containsKey(DayName.TUESDAY) })
+        }
     }
 }

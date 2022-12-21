@@ -10,19 +10,26 @@ import com.salus.doolar.domain.task.valueObject.Activity
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class TaskTest {
 
     private val activity = Activity("Lavar Roupa", ActivityCategory.HOME_CARE)
 
     @Test()
-    fun testShouldChangeStatus() {
+    fun testShouldChangeStatusAndCheckStatus() {
         Task(1, PeriodName.MORNING, this.activity).run {
             assertEquals(TaskStatus.PENDING, this.status)
             this.finish()
             assertEquals(TaskStatus.FINISHED, this.status)
+            assertTrue(this.isFinished())
             this.reset()
             assertEquals(TaskStatus.PENDING, this.status)
+            assertFalse(this.isFinished())
+            assertTrue(this.isPending())
+            this.markTaskAsNotFinished()
+            assertTrue(this.isNotFinished())
         }
     }
 

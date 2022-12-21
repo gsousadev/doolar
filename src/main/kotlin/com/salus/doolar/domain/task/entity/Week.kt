@@ -10,15 +10,25 @@ data class Week(
     val days: MutableMap<DayName, Day>
 ) : AbstractEntity() {
 
-    init { this.validateWeekDays() }
+    init {
+        this.validateWeekDays()
+    }
 
     private fun validateWeekDays() {
-        if (days.size > 7){
+        if (days.size > 7) {
             throw WeekCannotHaveMoreThanSevenDaysException()
         }
 
-        if(days.isEmpty()){
+        if (days.isEmpty()) {
             throw WeekCannotBeWithoutDaysException()
         }
+    }
+
+    fun addDay(day: Day) {
+        this.days[day.name] = day
+    }
+
+    fun removeDay(day: Day) {
+        this.days.remove(day.name)
     }
 }
